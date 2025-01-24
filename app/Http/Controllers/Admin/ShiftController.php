@@ -10,10 +10,6 @@ use Inertia\Inertia;
 
 class ShiftController extends Controller
 {
-    public function index()
-    {
-        return Inertia::render('Admin/Shifts/Index');
-    }
     public function new()
     {
         return Inertia::render('Admin/Shifts/New');
@@ -64,4 +60,6 @@ class ShiftController extends Controller
         // })->get();
 
     }
+
+    // two method remained: update & delete
 }

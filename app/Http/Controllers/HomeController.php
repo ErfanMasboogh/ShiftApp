@@ -3,14 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Role;
-use App\Models\User;
-use Illuminate\Support\Facades\Hash;
 use Inertia\Inertia;
-use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function adminIndex()
+    public function admin()
     {
         $role = Role::where('name', 'ساده')->count();
         if (!$role) {
@@ -21,7 +18,7 @@ class HomeController extends Controller
         }
         return Inertia::render('Admin/Index');
     }
-    public function userIndex()
+    public function user()
     {
         return Inertia::render('User/Index');
     }

@@ -41,8 +41,7 @@ class PaymentController extends Controller
         ];
         return Inertia::render('Admin/Payments/Details', compact('context'));
     }
-
-    public function pendingStore(Request $request)
+    public function store(Request $request)
     {
         $date = Carbon::now()->format('Y:m:d');
         $date = preg_replace('/:/', '-', $date, 2);
