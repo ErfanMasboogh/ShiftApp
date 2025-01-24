@@ -1,21 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
-use App\Models\User;
-use Inertia\Inertia;
+use App\Http\Controllers\Controller;
 use App\Models\Commute;
 use App\Models\Payment;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Morilog\Jalali\Jalalian;
 
 class PaymentController extends Controller
 {
-    public function index()
-    {
-        return Inertia::render('Admin/Payments/Index');
-    }
     public function pending()
     {
         $users = User::where('salary', '!=', '0')->get()->toArray();
@@ -43,35 +40,6 @@ class PaymentController extends Controller
             'users' => $users
         ];
         return Inertia::render('Admin/Payments/Details', compact('context'));
-    }
-
-    public function userPending()
-    {
-        $user = User::where([['salary', '!=', '0'], ['id', auth()->user()->id]])->get()->toArray();
-        $context = [
-            'users' => $user
-        ];
-        return Inertia::render('User/Pending', compact('context'));
-    }
-    public function userPaid()
-    {
-        $user = User::all()->toArray();
-        $payments = Payment::where('user_id', auth()->user()->id)->get()->toArray();
-        $context = [
-            'users' => $user,
-            'payments' => $payments
-        ];
-        return Inertia::render('User/Paid', compact('context'));
-    }
-    public function userDetails()
-    {
-        $commutes = Commute::where([['salary', '!=', 0], ['user_id', auth()->user()->id]])->get()->toArray();
-        $users = User::all()->toArray();
-        $context = [
-            'commutes' => $commutes,
-            'users' => $users
-        ];
-        return Inertia::render('User/Details', compact('context'));
     }
 
     public function pendingStore(Request $request)

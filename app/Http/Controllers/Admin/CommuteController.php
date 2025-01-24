@@ -1,22 +1,19 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use Carbon\Carbon;
-use App\Models\User;
-use Inertia\Inertia;
-use App\Models\Shift;
+use App\Http\Controllers\Controller;
 use App\Models\Commute;
 use App\Models\CommuteList;
+use App\Models\Shift;
+use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 use Morilog\Jalali\Jalalian;
 
 class CommuteController extends Controller
 {
-    public function index()
-    {
-        return Inertia::render('Admin/Commutes/Index');
-    }
     public function enter()
     {
         $users = User::where('is_admin', 0)->get()->toArray();
@@ -53,16 +50,6 @@ class CommuteController extends Controller
         ];
         return Inertia::render('Admin/Commutes/List', compact('context'));
 
-    }
-    public function userCommutes()
-    {
-        $commutes = CommuteList::where('user_id', auth()->user()->id)->get()->toArray();
-        $users = User::all()->toArray();
-        $context = [
-            'commutes' => $commutes,
-            'users' => $users
-        ];
-        return Inertia::render('User/Commutes', compact('context'));
     }
     public function enterStore(Request $request)
     {
