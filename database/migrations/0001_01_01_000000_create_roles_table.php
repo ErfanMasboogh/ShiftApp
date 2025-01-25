@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique()->nullable(false);
-            $table->integer('over_payment')->default(0);
+            $table->string('name',64)->unique();
+            $table->unsignedInteger('over_payment')->default(0);
             $table->timestamps();
         });
     }

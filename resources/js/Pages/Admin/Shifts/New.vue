@@ -23,12 +23,12 @@
                             <InputLabel>حقوق ساعتی شیفت (هزارتومان)</InputLabel>
                         </div>
                         <div>
-                            <NumberInput v-model="form.wage"></NumberInput>
+                            <NumberInput v-model="form.wage_per_hour"></NumberInput>
                         </div>
                         <div>
                             <InputError
                                 class="mt-2"
-                                :message="form.errors.wage"
+                                :message="form.errors.wage_per_hour"
                             />
                         </div>
                     </div>
@@ -88,7 +88,7 @@ import { onMounted, ref, watch } from "vue";
 
 const form = useForm({
     name: "",
-    wage: "",
+    wage_per_hour: "",
     start: "",
     end: "",
 });

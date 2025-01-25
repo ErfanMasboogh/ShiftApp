@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Commute;
-use App\Models\CommuteList;
+use App\Models\CommuteDetail;
 use App\Models\Shift;
 use App\Models\User;
 use Carbon\Carbon;
@@ -42,7 +42,7 @@ class CommuteController extends Controller
     }
     public function list()
     {
-        $commutes = CommuteList::all()->toArray();
+        $commutes = CommuteDetail::all()->toArray();
         $users = User::all();
         $context = [
             'commutes' => $commutes,
@@ -94,7 +94,7 @@ class CommuteController extends Controller
                 $endTimeForCalculate = min($exit, $end);
                 $diffrence = $endTimeForCalculate - $startTimeForCalculate;
                 $hoursWorked = $diffrence / 60 / 60;
-                $salary += $hoursWorked * $shift->wage;
+                $salary += $hoursWorked * $shift->wage_per_hour;
             }
         }
         // -------
@@ -111,7 +111,7 @@ class CommuteController extends Controller
         $commute_list->save();
 
         $user = User::find($commute->user_id);
-        $user->salary += $salary;
+        $user->unpaid_salary += $salary;
         $user->save();
         return redirect(route('admin.index'));
 

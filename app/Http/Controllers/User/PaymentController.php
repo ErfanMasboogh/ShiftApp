@@ -12,7 +12,7 @@ class PaymentController extends Controller
 {
     public function pending()
     {
-        $user = User::where([['salary', '!=', '0'], ['id', auth()->user()->id]])->get()->toArray();
+        $user = User::where([['unpaid_salary', '!=', '0'], ['id', auth()->user()->id]])->get()->toArray();
         $context = [
             'users' => $user
         ];

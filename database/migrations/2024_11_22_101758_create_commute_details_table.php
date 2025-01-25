@@ -10,14 +10,15 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('commute_lists', function (Blueprint $table) {
+        Schema::create('commute_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedInteger('user_id');
             $table->boolean('is_exit')->default(0);
             $table->time('time');
             $table->date('date');
-            $table->timestamps();
+            $table->timestamp('created_at')->useCurrent();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
@@ -26,6 +27,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('commute_lists');
+        Schema::dropIfExists('commute_details');
     }
 };

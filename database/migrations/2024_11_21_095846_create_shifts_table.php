@@ -12,10 +12,10 @@ return new class extends Migration {
     {
         Schema::create('shifts', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
+            $table->string('name',64)->unique();
             $table->time('start');
             $table->time('end');
-            $table->integer('wage');
+            $table->unsignedInteger('wage_per_hour');
             $table->timestamps();
         });
     }

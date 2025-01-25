@@ -12,15 +12,16 @@ return new class extends Migration {
     {
         Schema::create('commutes', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->unsignedInteger('user_id');
             $table->time('enter');
-            $table->time('exit')->nullable(true);
-            $table->integer('salary')->nullable(true);
+            $table->time('exit')->nullable();
+            $table->unsignedInteger('salary')->nullable();
             $table->boolean('is_paid')->default(0);
             $table->date('enter_date');
             $table->date('exit_date');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

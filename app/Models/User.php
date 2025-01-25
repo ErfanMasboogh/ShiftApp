@@ -60,9 +60,9 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class);
 
     }
-    public function commuteList()
+    public function commuteDetails()
     {
-        return $this->hasMany(CommuteList::class);
+        return $this->hasMany(CommuteDetail::class);
 
     }
 

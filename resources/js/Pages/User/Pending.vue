@@ -29,7 +29,7 @@
                                     {{ item.name }}
                                 </td>
                                 <td class="justify-self-center m-1">
-                                    {{ item.salary }}
+                                    {{ item.unpaid_salary }}
                                 </td>
                             </div>
                         </template>

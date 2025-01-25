@@ -12,16 +12,17 @@ return new class extends Migration {
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->unique();
-            $table->unsignedBigInteger('role_id')->nullable(true);
-            $table->foreign('role_id')->references('id')->on('roles')->onDelete('set null');
-            $table->integer('salary')->default(0);
+            $table->string('name',64)->unique();
+            $table->unsignedInteger('role_id')->nullable();
+            $table->unsignedInteger('unpaid_salary')->default(0);
             $table->boolean('is_admin')->default(0);
-            $table->string('email')->unique();
+            $table->string('email',128)->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();
+
+            $table->foreign('role_id')->references('id')->on('roles')->onDelete('set null');
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
