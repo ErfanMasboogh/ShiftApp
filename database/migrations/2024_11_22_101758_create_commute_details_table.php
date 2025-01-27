@@ -12,13 +12,11 @@ return new class extends Migration {
     {
         Schema::create('commute_details', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->boolean('is_exit')->default(0);
             $table->time('time');
             $table->date('date');
             $table->timestamp('created_at')->useCurrent();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

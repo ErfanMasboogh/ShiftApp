@@ -15,7 +15,7 @@ class PaymentController extends Controller
 {
     public function pending()
     {
-        $users = User::where('unpaid_salary', '!=', '0')->get()->toArray();
+        $users = User::where('unpaid_salary', '!=', null)->get()->toArray();
         $context = [
             'users' => $users
         ];
@@ -53,7 +53,7 @@ class PaymentController extends Controller
         $payment->date = $shamsiDate;
         $payment->save();
 
-        $user->unpaid_salary = 0;
+        $user->unpaid_salary = null;
         $user->save();
 
         $commutes = Commute::where([['user_id', $user->id], ['is_paid', 0]])->get();

@@ -18,6 +18,8 @@ class AuthenticatedSessionController extends Controller
     /**
      * Display the login view.
      */
+
+    // Hash Of Pass 11111111 : $2y$12$s8s3co9KPZaR65lfTXcsQ.SdbrtjpWATH/9qKVmXrFFg7J/uAtzxO
     public function create(): Response
     {
         return Inertia::render('Auth/Login', [

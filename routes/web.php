@@ -28,9 +28,9 @@ Route::middleware(LoginCheck::class)->group(function () {
             // ========== Commutes
             Route::group(['prefix' => 'commutes'], function () {
                 Route::get('/enter', [AdminCommuteController::class, 'enter'])->name('admin.commutes.enter');
-                Route::post('/enter', [AdminCommuteController::class, 'enterStore']);
+                Route::post('/enter', [AdminCommuteController::class, 'create']);
                 Route::get('/exit', [AdminCommuteController::class, 'exit'])->name('admin.commutes.exit');
-                Route::post('/exit', [AdminCommuteController::class, 'exitStore']);
+                Route::post('/exit', [AdminCommuteController::class, 'update']);
                 Route::get('/list', [AdminCommuteController::class, 'list'])->name('admin.commutes.list');
             });
             // ========== Users

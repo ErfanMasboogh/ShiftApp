@@ -33,6 +33,4 @@ class AdminController extends Controller
         $user->save();
         return redirect(route('admin.users.admins'));
     }
-
-
 }

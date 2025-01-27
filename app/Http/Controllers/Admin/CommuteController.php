@@ -11,6 +11,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Morilog\Jalali\Jalalian;
+use function App\Helpers\calculateSalary;
 
 class CommuteController extends Controller
 {
@@ -51,69 +52,35 @@ class CommuteController extends Controller
         return Inertia::render('Admin/Commutes/List', compact('context'));
 
     }
-    public function enterStore(Request $request)
+    public function create(Request $request) // Store enter data
     {
-        // $date = Carbon::now()->format('Y:m:d') . ' ' . $request->enter;
-        // $dateString = preg_replace('/:/', '-', $date, 2);
-        // $carbonDate = Carbon::createFromFormat('Y-m-d H:i', $dateString)->timestamp;
         $now = Carbon::now()->format('H:i');
         $date = Carbon::now()->format('Y:m:d');
         $date = preg_replace('/:/', '-', $date, 2);
         $shamsiDate = Jalalian::fromDateTime($date)->format('Y/m/d');
-        $commute = new Commute;
-        $commute->user_id = $request->user_id;
-        $commute->enter = $now . ':00';
-        $commute->enter_date = $shamsiDate;
-        $commute->save();
-        $commute_list = new CommuteList;
-        $commute_list->user_id = $request->user_id;
-        $commute_list->time = $now . ':00';
-        $commute_list->date = $shamsiDate;
-        $commute_list->save();
+
+        Commute::createCommute($request->user_id,$now . ':00',$shamsiDate);
+        CommuteDetail::createCommuteDetail($request->user_id,$now . ':00',$shamsiDate);
 
         return redirect(route('admin.index'));
     }
-    public function exitStore(Request $request)
+    public function update(Request $request) // Store exit data
     {
         $commute = Commute::find($request->item_id);
         $now = Carbon::now()->format('H:i');
         $date = Carbon::now()->format('Y:m:d');
         $date = preg_replace('/:/', '-', $date, 2);
         $shamsiDate = Jalalian::fromDateTime($date)->format('Y/m/d');
-        // Salary Calculation
-        $shifts = Shift::all();
-        $salary = 0;
-        $miladiEnterDate = Jalalian::fromFormat('Y-m-d', $commute->enter_date)->toCarbon()->format('Y-m-d');
-        $enter = strtotime(str($miladiEnterDate . ' ' . $commute->enter));
-        $exit = strtotime(str($date . ' ' . $now));
-        foreach ($shifts as $shift) {
-            $start = strtotime(str($miladiEnterDate . ' ' . $shift->start));
-            $end = strtotime(str($date . ' ' . $shift->end));
-            if ($exit > $start && $enter < $end) {
-                $startTimeForCalculate = max($enter, $start);
-                $endTimeForCalculate = min($exit, $end);
-                $diffrence = $endTimeForCalculate - $startTimeForCalculate;
-                $hoursWorked = $diffrence / 60 / 60;
-                $salary += $hoursWorked * $shift->wage_per_hour;
-            }
-        }
-        // -------
+        $salary = calculateSalary($commute);
         $commute->salary = $salary;
         $commute->exit = $now;
         $commute->exit_date = $shamsiDate;
-        $commute->save();
-
-        $commute_list = new CommuteList;
-        $commute_list->user_id = $commute->user_id;
-        $commute_list->time = $now . ':00';
-        $commute_list->is_exit = 1;
-        $commute_list->date = $shamsiDate;
-        $commute_list->save();
-
+        Commute::updateCommute($commute);
+        CommuteDetail::createCommuteDetail($commute->user_id,$now . ':00',$shamsiDate,1);
         $user = User::find($commute->user_id);
         $user->unpaid_salary += $salary;
-        $user->save();
-        return redirect(route('admin.index'));
+        User::updateUser($user);
 
+        return redirect(route('admin.index'));
     }
 }

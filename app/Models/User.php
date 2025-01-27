@@ -45,7 +45,10 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-
+    public function updateUser(User $user): User{
+        $user->save();
+        return $user;
+    }
     public function role()
     {
         return $this->belongsTo(Role::class);

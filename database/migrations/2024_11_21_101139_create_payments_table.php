@@ -12,12 +12,10 @@ return new class extends Migration {
     {
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
-            $table->unsignedInteger('user_id');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->unsignedInteger('amount');
             $table->date('date');
             $table->timestamp('created_at')->useCurrent();
-
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 
