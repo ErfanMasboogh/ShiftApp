@@ -10,4 +10,12 @@ class Payment extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function createPayment($user_id,$amount,$date): Payment{
+        $payment = new Payment;
+        $payment->user_id = $user_id;
+        $payment->amount = $amount;
+        $payment->date = $date;
+        $payment->save();
+        return $payment;
+    }
 }

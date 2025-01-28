@@ -12,15 +12,6 @@ class RoleController extends Controller
 {
     public function list()
     {
-        $role = Role::where('name', 'ساده')->count();
-        if (!$role) {
-            $defaultRole = new Role;
-            $defaultRole->name = 'ساده';
-            $defaultRole->over_payment = 0;
-            $defaultRole->save();
-        }
-
-
         $roles = Role::all();
         $context = [
             'roles' => $roles,
@@ -35,10 +26,9 @@ class RoleController extends Controller
         $users = User::where('role_id', $id)->get();
         foreach ($users as $user) {
             $user->role_id = 1;
-            $user->save();
+            User::updateUser($user);
         }
-
-        Role::find($id)->delete();
+        Role::deleteRole($id);
         return redirect(route('admin.users.roles'));
     }
     public function update(Request $request)
@@ -50,7 +40,7 @@ class RoleController extends Controller
         $role = Role::find($request->id);
         $role->name = $request->name;
         $role->over_payment = $request->over_payment;
-        $role->save();
+        Role::updateRole($role);
         return redirect(route('admin.users.roles'));
     }
 
@@ -60,11 +50,7 @@ class RoleController extends Controller
             'name' => 'required|string|max:32',
             'over_payment' => 'required|max:4'
         ]);
-
-        $role = new Role;
-        $role->name = $request->name;
-        $role->over_payment = $request->over_payment;
-        $role->save();
+        Role::createRole($request->name,$request->over_payment);
         return redirect(route('admin.users.roles'));
     }
 

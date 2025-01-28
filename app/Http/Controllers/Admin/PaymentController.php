@@ -47,19 +47,13 @@ class PaymentController extends Controller
         $date = preg_replace('/:/', '-', $date, 2);
         $shamsiDate = Jalalian::fromDateTime($date)->format('Y/m/d');
         $user = User::find($request->item_id);
-        $payment = new Payment;
-        $payment->user_id = $user->id;
-        $payment->amount = $user->unpaid_salary;
-        $payment->date = $shamsiDate;
-        $payment->save();
-
+        Payment::createPayment($user->id, $user->unpaid_salary, $shamsiDate);
         $user->unpaid_salary = null;
-        $user->save();
-
+        User::updateUser($user);
         $commutes = Commute::where([['user_id', $user->id], ['is_paid', 0]])->get();
         foreach ($commutes as $commute) {
             $commute->is_paid = 1;
-            $commute->save();
+            Commute::updateCommute($commute);
         }
         return redirect(route('admin.index'));
     }

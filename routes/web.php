@@ -40,9 +40,12 @@ Route::middleware(LoginCheck::class)->group(function () {
                 Route::get('/list', [UserController::class, 'list'])->name('admin.users.list');
                 Route::delete('/list/{id}', [UserController::class, 'delete'])->name('admin.users.list.delete');
                 Route::post('/list', [UserController::class, 'update']);
-                Route::get('/admins', [AdminController::class, 'list'])->name('admin.users.admins');
-                Route::delete('/admins/{id}', [AdminController::class, 'delete'])->name('admin.users.admins.delete');
-                Route::post('/admins', [AdminController::class, 'new']);
+                Route::group(['prefix' => 'admins'], function () {
+                    Route::get('/', [AdminController::class, 'list'])->name('admin.users.admins');
+                    Route::post('/', [AdminController::class, 'update']);
+                    Route::delete('/{id}', [AdminController::class, 'delete'])->name('admin.users.admins.delete');
+                });
+                Route::group(['prefix' => 'roles'], function () {});
                 Route::get('/roles', [RoleController::class, 'list'])->name('admin.users.roles');
                 Route::delete('/roles/{id}', [RoleController::class, 'delete'])->name('admin.users.roles.delete');
                 Route::post('/roles', [RoleController::class, 'update'])->name('admin.users.roles.update');

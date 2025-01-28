@@ -23,14 +23,14 @@ class AdminController extends Controller
     {
         $admin = User::find($id);
         $admin->is_admin = 0;
-        $admin->save();
+        User::updateUser($admin);
         return redirect(route('admin.users.admins'));
     }
-    public function new(Request $request)
+    public function update(Request $request)
     {
         $user = User::find($request->user_id);
         $user->is_admin = true;
-        $user->save();
+        User::updateUser($user);
         return redirect(route('admin.users.admins'));
     }
 }
