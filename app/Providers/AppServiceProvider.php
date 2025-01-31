@@ -29,7 +29,13 @@ class AppServiceProvider extends ServiceProvider
      */
     private function createDefaultRole(){
         $role = Role::where('name', 'ساده')->count();
-        if (!$role) Role::createRole('ساده', 0);
+        if (!$role) {
+            $role = new role;
+            $role->id = 1;
+            $role->name = 'ساده' ;
+            $role->over_payment = 0;
+            $role->save();
+        }
     }
 
 }
