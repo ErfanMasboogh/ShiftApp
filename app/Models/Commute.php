@@ -10,7 +10,7 @@ class Commute extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function createCommute($user_id,$enter,$date): Commute{
+    public static function createCommute($user_id,$enter,$date): Commute{
         $commute = new Commute;
         $commute->user_id = $user_id;
         $commute->enter = $enter;
@@ -18,7 +18,7 @@ class Commute extends Model
         $commute->save();
         return $commute;
     }
-    public function updateCommute(Commute $commute): Commute{
+    public static function updateCommute(Commute $commute): Commute{
         $commute->save();
         return $commute;
     }

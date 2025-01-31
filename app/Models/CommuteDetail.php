@@ -9,7 +9,7 @@ class CommuteDetail extends Model
     {
         return $this->belongsTo(User::class);
     }
-    public function createCommuteDetail($user_id,$time,$date, int $is_exit = 0): CommuteDetail{
+    public static function createCommuteDetail($user_id,$time,$date, int $is_exit = 0): CommuteDetail{
         $commuteDetail = new CommuteDetail;
         $commuteDetail->user_id = $user_id;
         $commuteDetail->time = $time;
