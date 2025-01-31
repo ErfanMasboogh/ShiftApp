@@ -17,10 +17,8 @@ class Role extends Model
         $role->save();
         return $role;
     }
-    public static function deleteRole($id){
-        $role = Role::find($id);
-        $role->delete();
-        return $role;
+    public static function deleteRole($id): bool{
+        return Role::find($id)->delete();
     }
     public static function updateRole(Role $role): Role{
         $role->save();

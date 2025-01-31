@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 
 class User extends Authenticatable
 {
@@ -45,9 +46,20 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function updateUser(User $user): User{
+    public static function createUser($name, $email, $password,$role_id = 1): User{
+        $user = new User();
+        $user->name = $name;
+        $user->email = $email;
+        $user->password = Hash::make($password);
+        $user->role_id = $role_id;
+        return $user;
+    }
+    public static function updateUser(User $user): User{
         $user->save();
         return $user;
+    }
+    public static function deleteUser(int $id): bool{
+        return User::find($id)->delete();
     }
     public function role()
     {
