@@ -8,12 +8,14 @@ use App\Models\Payment;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 use Morilog\Jalali\Jalalian;
 
 class PaymentController extends Controller
 {
-    public function pending()
+    public function pending(): InertiaResponse
     {
         $users = User::where('unpaid_salary', '!=', null)->get()->toArray();
         $context = [
@@ -21,7 +23,7 @@ class PaymentController extends Controller
         ];
         return Inertia::render('Admin/Payments/Pending', compact('context'));
     }
-    public function paid()
+    public function paid(): InertiaResponse
     {
         $users = User::all()->toArray();
         $payments = Payment::all()->toArray();
@@ -31,7 +33,7 @@ class PaymentController extends Controller
         ];
         return Inertia::render('Admin/Payments/Paid', compact('context'));
     }
-    public function details()
+    public function details(): InertiaResponse
     {
         $commutes = Commute::where('salary', '!=', 0)->get()->toArray();
         $users = User::all()->toArray();
@@ -41,20 +43,20 @@ class PaymentController extends Controller
         ];
         return Inertia::render('Admin/Payments/Details', compact('context'));
     }
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        $date = Carbon::now()->format('Y:m:d');
-        $date = preg_replace('/:/', '-', $date, 2);
+        $date = Carbon::now()->format('Y-m-d');
         $shamsiDate = Jalalian::fromDateTime($date)->format('Y/m/d');
         $user = User::find($request->item_id);
         Payment::createPayment($user->id, $user->unpaid_salary, $shamsiDate);
         $user->unpaid_salary = null;
         User::updateUser($user);
-        $commutes = Commute::where([['user_id', $user->id], ['is_paid', 0]])->get();
+
+        $commutes = Commute::unpaid($user->id)->get();
         foreach ($commutes as $commute) {
             $commute->is_paid = 1;
             Commute::updateCommute($commute);
         }
-        return redirect(route('admin.index'));
+        return redirect()->route('admin.index');
     }
 }

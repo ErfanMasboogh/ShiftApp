@@ -22,4 +22,10 @@ class Commute extends Model
         $commute->save();
         return $commute;
     }
+    public function scopeUnpaid($query,$user_id)
+    {
+
+        return $query->where('user_id',$user_id)
+        ->where('is_paid',0);
+    }
 }
