@@ -33,4 +33,8 @@ class Commute extends Model
         return $query->where('user_id',$user_id)
             ->where('exit',null);
     }
+    public function scopeExited($query,$user_id){
+        return $query->where('user_id',$user_id)
+            ->where('salary','!=',0);
+    }
 }

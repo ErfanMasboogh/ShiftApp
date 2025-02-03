@@ -80,5 +80,9 @@ class User extends Authenticatable
         return $this->hasMany(CommuteDetail::class);
 
     }
+    public function scopeUnpaid($query,$user_id){
+        return $query->where('id',$user_id)
+            ->where('unpaid_salary','!=',null);
+    }
 
 }

@@ -7,18 +7,19 @@ use App\Models\Commute;
 use App\Models\Payment;
 use App\Models\User;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class PaymentController extends Controller
 {
-    public function pending()
+    public function pending(): InertiaResponse
     {
-        $user = User::where([['unpaid_salary', '!=', null], ['id', auth()->user()->id]])->get()->toArray();
+        $user = User::unpaid(auth()->user()->id)->get()->toArray();
         $context = [
             'users' => $user
         ];
         return Inertia::render('User/Pending', compact('context'));
     }
-    public function paid()
+    public function paid(): InertiaResponse
     {
         $user = User::all()->toArray();
         $payments = Payment::where('user_id', auth()->user()->id)->get()->toArray();
@@ -28,9 +29,9 @@ class PaymentController extends Controller
         ];
         return Inertia::render('User/Paid', compact('context'));
     }
-    public function details()
+    public function details():InertiaResponse
     {
-        $commutes = Commute::where([['salary', '!=', 0], ['user_id', auth()->user()->id]])->get()->toArray();
+        $commutes = Commute::exited(auth()->user()->id)->get()->toArray();
         $users = User::all()->toArray();
         $context = [
             'commutes' => $commutes,
