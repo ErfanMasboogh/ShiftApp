@@ -3,38 +3,27 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\User\UpdateRequest;
 use App\Models\Role;
 use App\Models\User;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Validation\Rules\Password;
+use App\Http\Requests\User\StoreRequest;
+use Illuminate\Http\RedirectResponse;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class UserController extends Controller
 {
-    public function new()
+    public function new():InertiaResponse
     {
         return Inertia::render('Admin/Users/New');
     }
-    public function store(Request $request)
+    public function store(StoreRequest $request):RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:64',
-            'email' => 'required|string|lowercase|email|max:255|unique:' . User::class,
-            'password' => ['required', 'confirmed', Password::defaults()],
-        ]);
         User::createUser($request->name,$request->email , $request->password);
-        return redirect(route('admin.users.list'));
+        return redirect()->route('admin.users.list');
     }
-    public function list()
+    public function list(): InertiaResponse
     {
-        $role = Role::where('name', 'ساده')->count();
-        if (!$role) {
-            $defaultRole = new Role;
-            $defaultRole->name = 'ساده';
-            $defaultRole->over_payment = 0;
-            $defaultRole->save();
-        }
         $users = User::all()->toArray();
         $roles = Role::all()->toArray();
         $context = [
@@ -43,23 +32,19 @@ class UserController extends Controller
         ];
         return Inertia::render('Admin/Users/List', compact('context'));
     }
-    public function delete($id)
+    public function delete($id):RedirectResponse
     {
         User::deleteUser($id);
-        return redirect(route('admin.users.list'));
+        return redirect()->route('admin.users.list');
     }
 
-    public function update(Request $request)
+    public function update(UpdateRequest $request): RedirectResponse
     {
-        $request->validate([
-            'name' => 'required|string|max:64',
-            'role_id' => "required"
-        ]);
         $user = User::find($request->id);
         $user->name = $request->name;
         $user->role_id = $request->role_id;
         User::updateUser($user);
-        return redirect(route('admin.users.list'));
+        return redirect()->route('admin.users.list');
     }
 }
 
