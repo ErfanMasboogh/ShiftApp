@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Commute extends Model
 {
+    public $timestamps = false;
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -14,7 +15,7 @@ class Commute extends Model
         $commute = new Commute;
         $commute->user_id = $user_id;
         $commute->enter = $enter;
-        $commute->date = $date;
+        $commute->enter_date = $date;
         $commute->save();
         return $commute;
     }
@@ -27,5 +28,9 @@ class Commute extends Model
 
         return $query->where('user_id',$user_id)
         ->where('is_paid',0);
+    }
+    public function scopeNotExited($query,$user_id){
+        return $query->where('user_id',$user_id)
+            ->where('exit',null);
     }
 }
