@@ -7,14 +7,15 @@ use App\Models\Shift;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Inertia\Response as InertiaResponse;
 
 class ShiftController extends Controller
 {
-    public function new()
+    public function new(): InertiaResponse
     {
         return Inertia::render('Admin/Shifts/New');
     }
-    public function list()
+    public function list(): InertiaResponse
     {
         return Inertia::render('Admin/Shifts/List');
     }
