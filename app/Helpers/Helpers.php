@@ -31,3 +31,33 @@ function calculateSalary(Commute $commute,int $role_id):int{
     }
     return $salary;
 }
+function shiftOverlapCheck($newShiftStartTime, $newShiftEndTime): bool
+{
+    $shifts = Shift::all();
+    if ($shifts->isEmpty()) {
+        return true;
+    }
+    $date = Carbon::now()->format('Y-m-d');
+    $newShiftStartTimeCarbon = Carbon::parse($date . ' ' . $newShiftStartTime);
+    $newShiftEndTimeCarbon = Carbon::parse($date . ' ' . $newShiftEndTime);
+    if ($newShiftStartTimeCarbon->gt($newShiftEndTimeCarbon)) {
+        $newShiftEndTimeCarbon->addDay();
+    }
+    foreach ($shifts as $shift) {
+        $shiftStartTimeCarbon = Carbon::parse($date . ' ' . $shift->start);
+        $shiftEndTimeCarbon = Carbon::parse($date . ' ' . $shift->end);
+        if ($shiftStartTimeCarbon->gt($shiftEndTimeCarbon)) {
+            $shiftEndTimeCarbon->addDay();
+        }
+        if ($newShiftStartTimeCarbon->between($shiftStartTimeCarbon, $shiftEndTimeCarbon, true) ||
+            $newShiftEndTimeCarbon->between($shiftStartTimeCarbon, $shiftEndTimeCarbon, true) ||
+            ($newShiftStartTimeCarbon->lte($shiftStartTimeCarbon) && $newShiftEndTimeCarbon->gte($shiftEndTimeCarbon))
+        ) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
