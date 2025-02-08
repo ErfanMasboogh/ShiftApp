@@ -29,31 +29,47 @@
                             <div
                                 class="grid grid-cols-2 gap-2 justify-self-center m-1"
                             >
-                                <div>
-                                    <Link
-                                    >
-                                        <SecondaryButton
+                              <div>
+                                  <SecondaryButton
+                                      @click="deleteModalShowF(item)"
+                                  >
+                                      <TrashIcon></TrashIcon
+                                      >
+                                  </SecondaryButton>
+                                  <div v-if="deleteModalItem">
+                                      <ConfirmModalAutoId
+                                          :route="
+                                                route(
+                                                    'admin.shifts.list.delete',
+                                                    deleteModalItem.id
+                                                )
+                                            "
+                                          @no="deleteModalShowF(item)"
+                                          :show="deleteModalShow"
+                                      >
+                                          <div class="my-3 mx-auto">
+                                              آیا از حذف این شیفت مطمئن
+                                              هستید؟
+                                          </div>
+                                      </ConfirmModalAutoId>
+                                  </div>
+                              </div>
+
+                                    <div>
+                                        <Link
                                         >
-                                            <TrashIcon></TrashIcon>
-                                        </SecondaryButton
-                                        >
-                                    </Link>
+                                            <SecondaryButton
+                                            >
+                                                <EditIcon></EditIcon>
+                                            </SecondaryButton
+                                            >
+                                        </Link>
+                                    </div>
                                 </div>
-                                <div>
-                                    <Link
-                                    >
-                                        <SecondaryButton
-                                        >
-                                            <EditIcon></EditIcon>
-                                        </SecondaryButton
-                                        >
-                                    </Link>
-                                </div>
-                            </div>
+
 
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -66,8 +82,17 @@ import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TrashIcon from "@/Components/TrashIcon.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import {Link} from "@inertiajs/vue3";
+import ConfirmModalAutoId from "@/Components/DependedComponents/ConfirmModalAutoId.vue";
+import {ref} from "vue";
 
 const props = defineProps({
     context: Object
 })
+const deleteModalShow = ref(false);
+const deleteModalItem = ref("");
+
+function deleteModalShowF(item) {
+    deleteModalItem.value = item;
+    deleteModalShow.value = !deleteModalShow.value;
+}
 </script>
