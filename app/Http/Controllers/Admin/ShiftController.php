@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Shift\StoreRequest;
 use App\Models\Shift;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response as InertiaResponse;
@@ -23,7 +24,7 @@ class ShiftController extends Controller
         return Inertia::render('Admin/Shifts/List');
     }
 
-    public function store(StoreRequest $request)
+    public function store(StoreRequest $request): InertiaResponse|RedirectResponse
     {
         if ($request->start == $request->end) {
             $error = 'زمان شروع و پایان شیفت نمیتواند یکسان باشد.';
