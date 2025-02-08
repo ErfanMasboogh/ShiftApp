@@ -15,4 +15,8 @@ class Shift extends Model
         $shift->save();
         return $shift;
     }
+    public static function deleteShift($id):bool
+    {
+        return Shift::find($id)->delete();
+    }
 }

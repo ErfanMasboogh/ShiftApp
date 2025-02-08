@@ -43,6 +43,9 @@ class ShiftController extends Controller
             return Inertia::render('Admin/Shifts/New', compact('error'));
         }
     }
-
+    public function delete($id): RedirectResponse{
+        Shift::deleteShift($id);
+        return redirect()->route('admin.shifts.list');
+    }
     // two method remained: update & delete
 }

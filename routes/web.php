@@ -24,6 +24,7 @@ Route::middleware(LoginCheck::class)->group(function () {
                 Route::get('/new', [ShiftController::class, 'new'])->name('admin.shifts.new');
                 Route::Post('/new', [ShiftController::class, 'store']);
                 Route::get('/list', [ShiftController::class, 'list'])->name('admin.shifts.list');
+                Route::delete('/list/{id}', [ShiftController::class, 'delete'])->name('admin.shifts.list.delete');
             });
             // ========== Commutes
             Route::group(['prefix' => 'commutes'], function () {
