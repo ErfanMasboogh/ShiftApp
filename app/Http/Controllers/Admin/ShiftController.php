@@ -21,7 +21,11 @@ class ShiftController extends Controller
 
     public function list(): InertiaResponse
     {
-        return Inertia::render('Admin/Shifts/List');
+        $shifts = Shift::all();
+        $context = [
+          'shifts' => $shifts
+        ];
+        return Inertia::render('Admin/Shifts/List',compact('context'));
     }
 
     public function store(StoreRequest $request): InertiaResponse|RedirectResponse
