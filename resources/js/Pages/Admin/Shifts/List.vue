@@ -55,16 +55,20 @@
                                   </div>
                               </div>
 
-                                    <div>
-                                        <Link
-                                        >
-                                            <SecondaryButton
-                                            >
-                                                <EditIcon></EditIcon>
-                                            </SecondaryButton
-                                            >
-                                        </Link>
+                                <div>
+                                    <SecondaryButton
+                                        @click="editModalShowF(item)"
+                                    ><EditIcon></EditIcon
+                                    ></SecondaryButton>
+                                    <div v-if="editModalShow">
+                                        <ConfirmModalAdminUserShift
+                                            :show="true"
+                                            :item="editModalItem"
+                                            :roles="props.context.roles"
+                                            @no="editModalShowF(item)"
+                                        ></ConfirmModalAdminUserShift>
                                     </div>
+                                </div>
                                 </div>
 
 
@@ -81,18 +85,24 @@ import EditIcon from "@/Components/EditIcon.vue";
 import SecondaryButton from "@/Components/SecondaryButton.vue";
 import TrashIcon from "@/Components/TrashIcon.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import {Link} from "@inertiajs/vue3";
 import ConfirmModalAutoId from "@/Components/DependedComponents/ConfirmModalAutoId.vue";
 import {ref} from "vue";
+import ConfirmModalAdminUserShift from "@/Components/DependedComponents/ConfirmModalAdminUserShift.vue";
 
 const props = defineProps({
     context: Object
 })
 const deleteModalShow = ref(false);
 const deleteModalItem = ref("");
+const editModalShow = ref(false);
+const editModalItem = ref("");
 
 function deleteModalShowF(item) {
     deleteModalItem.value = item;
     deleteModalShow.value = !deleteModalShow.value;
+}
+function editModalShowF(item) {
+    editModalItem.value = item;
+    editModalShow.value = !editModalShow.value;
 }
 </script>
