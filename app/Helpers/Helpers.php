@@ -8,6 +8,8 @@ use Carbon\Carbon;
 use Morilog\Jalali\Jalalian;
 use App\Models\Commute;
 
+use function PHPUnit\Framework\isEmpty;
+
 function calculateSalary(Commute $commute,int $role_id):int{
     $now = Carbon::now()->format('H:i:s');
     $date = Carbon::now()->format('Y-m-d');
@@ -31,9 +33,9 @@ function calculateSalary(Commute $commute,int $role_id):int{
     }
     return $salary;
 }
-function shiftOverlapCheck($newShiftStartTime, $newShiftEndTime): bool
+function shiftOverlapCheck($newShiftStartTime, $newShiftEndTime,$isUpdate = false,$updatingShiftId = 1): bool
 {
-    $shifts = Shift::all();
+    $shifts = $isUpdate ? Shift::where('id','!=',$updatingShiftId)->get() : Shift::all();
     if ($shifts->isEmpty()) {
         return true;
     }
