@@ -48,7 +48,7 @@ const no = () => {
 };
 const yes = () => {
     if (props.closeable) {
-        form.post(route('admin.shifts.list.update'));
+        form.post(route('admin.shifts.list.update',props.item.id));
         no();
     }
 };
